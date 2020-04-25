@@ -1,107 +1,112 @@
 //create start button variable
 var startBtn = document.querySelector("#startButton");
-var container = document.querySelector("#container");
 
 
 //create questions var
 var questions = [
     {
         question: "What tag is required in all HTML documents, and is used to define the title?",
-        a:"(a) <title></title>",
-        b:"(b) <footer>",
-        c:"(c)<head></head>",
+        choices: ["<title></title>","<footer>", "<head></head>"],
+        answer: "<title></title>"
     },
-    // {
-    //     question: "What tag is required in all HTML documents, and is used to define the title?\n(a) <title></title>\n\(b) <footer>\n (c)<head></head>",
-    //     answer: "a"
-    // },
-    // {
-    //     question: "What tag is required in all HTML documents, and is used to define the title?\n(a) <title></title>\n\(b) <footer>\n (c)<head></head>",
-    //     answer: "a"
-    // },
-    // {
-    //     question: "What tag is required in all HTML documents, and is used to define the title?\n(a) <title></title>\n\(b) <footer>\n (c)<head></head>",
-    //     answer: "a"
-    // },
+    {
+        question: "How do you create an element in javaScript?",
+        choices: ["querySelection","createElement", "createID"],
+        answer: "createElement"
+    },
+    {
+        question: "What does # symbolize in css?",
+        choices: ["id","class", "button"],
+        answer: "id"
+    },
+    {
+        question: "How do you create an unordered list in html?",
+        choices: ["<ul></ul>","<footer>", "<li></li>"],
+        answer: "<ul></ul>"
+    },
 ];
 //create score var
 var score = 0;
+var current = 0;
+var output = document.querySelector("#container");
+var secondsLeft = 120;
+var timerInterval;
 
-// create render function
-function renderQuest() {
-    // Clear question element and load new question
-    container.innerHTML = "";
-  
-    // Render a new question
-    for (var i = 0; i < questions.length; i++) {
-     var h2 = document.createElement("h2");
-        h2.textContent = questions[i].question;
-            container.appendChild(h2);
 
-    // var linebreak = document.createElement("br");
-    //     h2.appendChild(linebreak);
-        
-      var btnA = document.createElement("button");
-        btnA.textContent = questions[i].a;
-            btnA.setAttribute("class", ".btn btn-dark");
-                h2.appendChild(btnA);
-                    // btnA.appendChild(linebreak);
+function newQuest() {
+    output.innerHTML ="";
+    var h2 = document.createElement("h2");
+        h2.textContent = questions[current].question;
+            output.appendChild(h2);
 
-      var btnB = document.createElement("button");
-        btnB.textContent = questions[i].b;
-            btnB.setAttribute("class", ".btn btn-dark");
-                h2.appendChild(btnB);
-                    // btnB.appendChild(linebreak);
+     var list = document.createElement("ul");
+        list.setAttribute("style", "list-style:none");
+             output.appendChild(list);
 
-      var btnC = document.createElement("button");
-        btnC.textContent = questions[i].c;
-            btnC.setAttribute("class", ".btn btn-dark");
-                h2.appendChild(btnC);
-                    // btnC.appendChild(linebreak);
-  
+        for (var x = 0; x< questions[current].choices.length; x++){
+            var li = document.createElement("li");
+            list.appendChild(li);
+            var button = document.createElement("button");
+                button.setAttribute("class", "btn btn-dark answer");
+            var choice = document.createTextNode(questions[current].choices[x]);
+
+            button.setAttribute("value", choice);
+
+            button.appendChild(choice);
+            li.appendChild(button);
+        }
+}
+
+
+const nextQuest = function(e){
+if (e.target.matches(".answer")){
+    var newP = document.createElement("p");
+    if (this.textContent === questions[current].answer){
+        newP.textContent = "Correct!";
     }
-  
-  }
+    else{
+        newP.textContent = "Wrong";
+        secondsLeft -= 10;
+    }
+    output.appendChild(newP);
+current++;
+newQuest();
+}
+}
+const leaderBoard = function(e){
+    if(nextQuest = ""){
+        var newH2 = document.createElement("h2");
+        newH2.textContent = "Congrats you have completed the quiz. Now add your initials to the leaderboard!";
+            output.appendChild(newH2);
+
+    }
+}
+
+
+output.addEventListener("click", nextQuest);
 
 //create startBtn listener
+
 startBtn.addEventListener("click", function () {
     event.preventDefault();
 
     // Create the countdown timer.
-    var secondsLeft = 120;
 
     var timeEl = document.querySelector("#time");
 
-    var timerInterval = setInterval(function () {
+        timerInterval = setInterval(function () {
         secondsLeft--;
         timeEl.textContent = secondsLeft;
 
-        if (secondsLeft === 0) {
+        if (secondsLeft <= 0) {
             clearInterval(timerInterval);
 
         }
+    
 
     }, 1000);
 
-    renderQuest();
+    newQuest();
 
-    //create if and else
-    if ()
 
-    //create question loop
-//     for (var i = 0; i < questions.length; i++) {
-//         //ask question to user and get response
-//         var response = window.prompt(questions[i].question);
-//         if (response === questions[i].answer) {
-//             alert("Correct!");
-//         }
-//         else {
-//             alert("Wrong!");
-//             timeEl--;
-//         }
-//     }
-//     alert("you got" + score);
  });
-
-//var questOne = document.createElement("h2");
-//questOne.innerHTML = question[1].value;
